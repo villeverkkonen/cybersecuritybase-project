@@ -1,11 +1,11 @@
+If you delete the lines that was directed to comment, the line numbers won't match any more
+
 The flaws are:
 1. Cross-Site Scripting (XSS)
 2. Broken Authentication and Session Management
 3. Missing Function Level Access Control
 4. Unvalidated Redirects and Forwards
 5. Cross-Site Request Forgery (CSRF)
-
-If you delete the lines that was directed to comment, the line numbers won't match any more.
 
 Issue: Cross-Site Scripting (XSS)
 Steps to reproduce:
@@ -15,13 +15,13 @@ Steps to reproduce:
 4. In 'Password'-field, type any password
 5. Press 'Register Now!'-button
 6. Click link 'Move to Hunters Page'
-7. All registered names will be listed, and your JavaScript-code activates
+7. All registered names will be listed and your JavaScript-code activates
 
 Steps to fix this issue:
 1. Open file hunters.html
 2. On line 38 there is 'th:utext', which prints the names without escaping special characters
 3. Change 'th:utext' to 'th:text'
-4. Now the characters like <, >, (, ) and " are escaped to different form, so the script doesn't activate
+4. Now special characters are escaped to different form, so the script doesn't activate
 
 Issue: Broken Authentication and Session Management
 Steps to reproduce:
@@ -38,7 +38,7 @@ Steps to reproduce:
 11. Open incognito-window to get a new JSESSIONID
 12. Repeat steps 3-9
 13. Change the JSESSIONID in the URL to the JSESSIONID you copied earlier
-14. You get access to profile page of the user who signed up with that JSESSIONID
+14. You get access to profile page of the user who signed up/logged in with that JSESSIONID
 
 Steps to fix this issue:
 1. Open file MonkepoHunterController.java
@@ -46,7 +46,7 @@ Steps to fix this issue:
 	and 71 (monkepoHunterRepository.save(authenticatedUser);)
 3. In register-method, comment line 85 (monkepoHunter.setIdCode(session.getId());),
 	and uncomment line 84 (monkepoHunter.setIdCode(UUID.randomUUID().toString());)
-4. Now the IdCode for your profile is a random String, not your cookie
+4. Now the IdCode for your profile is a random String, not your JSESSIONID
 5. In profilePage-method, uncomment lines 106-109
 6. Now user can acces only his/her own profile page
 
@@ -58,7 +58,7 @@ Steps to preproduce:
 4. In 'Password'-field, type any password
 5. Press 'Register Now!' -button
 6. In URL-field, type http://localhost:8080/adminPage
-7. You get access to page that should be only for admins
+7. You get access to page for admins only
 
 Steps to fix this issue:
 1. Open file SecurityConfiguration.java
@@ -93,16 +93,16 @@ Steps to preproduce:
 9. Click link 'Back to Hunters Page'
 10. Click link 'Profile Page'
 11. You can see that your account also has amount 100
-12. If you want, you can visit some other page, like Google, but don't log out
+12. You can visit some other page, like Google, but don't log out
 13. In URL-field, type http://localhost:8080/youWon
 14. That site could be some evil user's own page, which he/she could link to you or redirect you there
+15. There is a form with two hidden fields set so that you transfer 100 monkepoMoney to evilUser,
+	because you didn't log out and are still authenticated
 15. Click button 'Get Money, Get Paid!'
-16. There is a form and two hidden fields with values set so that evilUser gets 100 monkepoMoney from you
-	because you are still authenticated on Monkepo-site, because you didn't log out
 17. If you now check your profile page and evilUser profile page,
 	you can see that your amount is 0 and evilUser's 200
 	
 Steps to fix this issue:
 1. Open file SecurityConfiguration.java
-2. In configure-method, comment line 23: 'http.csrf().disable();'
-3. Now when you click 'Get Money, Get Paid' -button, there comes csrf-error and no money is transferred
+2. In configure-method, comment line 23 (http.csrf().disable();)
+3. Now clicking the button shows csrf-error and no money is transferred
