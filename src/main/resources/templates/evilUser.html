@@ -29,13 +29,21 @@
             span {
                 color: yellow;
             }
+
+            .list {
+                background-color: #0C090A;
+                width: fit-content;
+                padding: 5px;
+                border-radius: 5px;
+                list-style-type: none;
+            }
         </style>
     </head>
     <body>
         <div class="tausta">
             <span class="info">Profile Info for evilUser</span>
             <br/>
-            <ol>
+            <ol class="list">
                 <span>Username: </span><li th:text="${evilUser.username}">username</li>
                 <span>Crypted password: </span><li th:text="${evilUser.password}">password</li>
                 <!--                Non-crypted password is: 1234. You can log in with that on evilUser-->
