@@ -1,0 +1,114 @@
+If you delete the lines that was directed to comment, the line numbers won't match any more.
+But it does the same thing, of course
+
+Issue: Cross-Site Scripting (XSS)
+Steps to reproduce:
+1. Run cybersecuritybase-project
+2. Open browser
+3. In URL-field, type http://localhost:8080
+4. In 'Username'-field, type: <script>window.location.href='http://www.google.com/';</script> (or some other code)
+5. In 'Password'-field, type anything you want or leave blank
+6. Press 'Register Now!'-button
+7. You will get notification by successfull registeration
+8. Click link 'Move to Hunters Page'
+9. All registered names will be listed, and your JavaScript code activates
+
+Steps to fix this issue:
+1. Open file hunters.html
+2. On line 38 there is 'th:utext', which prints the names without escaping special characters
+3. Change 'th:utext' to 'th:text'
+4. Now the characters like <, >, (, ) and " are escaped to different form, so the script doesn't activate
+
+Issue: Broken Authentication and Session Management
+Steps to reproduce:
+1. Run cybersecuritybase-project
+2. Open browser
+3. In URL-field, type http://localhost:8080
+4. In 'Username'-field, type a name you want
+5. In 'Password'-field, type a password you want
+6. Press 'Register Now!' -button
+7. You will get notification by successfull registeration
+	and your cookie becomes your IdCode
+8. Click link 'Move to Hunters Page'
+9. Press 'Profile Page' -button
+10. Your own profile page opens with your cookie in the URL
+11. This is bad, because you might copy-paste that URL to someone who then gets your cookie
+12. Copy your cookie from the URL
+13. Open incognito-window to get a new cookie
+14. Repeat steps 3-9
+15. Change the cookie in the URL to the cookie you copied earlier
+16. You get access to profile page of the user who signed up with that cookie
+
+Steps to fix this issue:
+1. Open file MonkepoHunterController.java
+2. In monkepoHunters-method, comment lines 70 (authenticatedUser.setIdCode(session.getId());)
+	and 71 (monkepoHunterRepository.save(authenticatedUser);)
+3. In register-method, comment line 85 (monkepoHunter.setIdCode(session.getId());),
+	and uncomment line 84 (monkepoHunter.setIdCode(UUID.randomUUID().toString());)
+4. Now the IdCode for your profile is a random String, not your cookie
+5. In profilePage-method, uncomment lines 106-109
+6. Now user can acces only his/her own profile page
+
+Issue: Missing Function Level Access Control
+Steps to preproduce:
+1. Run cybersecuritybase-project
+2. Open browser
+3. In URL-field, type http://localhost:8080
+4. In 'Username'-field, type a name you want
+5. In 'Password'-field, type a password you want
+6. Press 'Register Now!' -button
+7. You will get notification by successfull registeration
+8. In URL-field, type http://localhost:8080/adminPage
+9. You get access to page that should be only for admins, but you are an user
+
+Steps to fix this issue:
+1. Open file SecurityConfiguration.java
+2. On line 29, change "USER" to "ADMIN"
+3. Now only admins can access /adminPage
+
+Issue: Unvalidated Redirects and Forwards
+Steps to preproduce:
+1. Run cybersecuritybase-project
+2. Open browser
+3. In URL-field, type http://localhost:8080
+4. In 'Username'-field, type a name you want
+5. In 'Password'-field, type a password you want
+6. Press 'Register Now!' -button
+7. You will get notification by successfull registeration
+8. in URL-field, type http://localhost:8080/redirect?where=http://www.google.com
+9. Evil user can link that to other users, who think it is trustworthy, but get redirected to another site
+
+Steps to fix this issue:
+1. Open MonkepoHunterController.java
+2. In redirect-method, uncomment lines 124-126
+3. Now controller checks, if the site user wants to redirect is allowed
+
+Issue: Cross-Site Request Forgery (CSRF)
+Steps to preproduce:
+1. Run cybersecuritybase-project
+2. Open browser
+3. In URL-field, type http://localhost:8080
+4. In 'Username'-field, type a name you want
+5. In 'Password'-field, type a password you want
+6. Press 'Register Now!' -button
+7. You will get notification by successfull registeration
+8. Click link 'Move to Hunters Page'
+9. Click link 'Profile Page for evilUser'
+10. You can see that evilUser has 100 monkepoMoney (amount)
+11. Click link 'Back to Hunters Page'
+12. Click link 'Profile Page'
+13. You can see that your account also has 100 monkepoMoney
+14. If you want, you can visit some other page, like Google, but don't log out
+15. In URL-field, type http://localhost:8080/youWon
+16. That site could be some evil user's own page, which he/she could link to you,
+	or redirect you there
+17. Click button 'Get Money, Get Paid!'
+18. There is a form and two hidden fields with values set that evilUser gets 100 monkepoMoney from you
+	because you are still authenticated on Monkepo-site, because you didn't log out
+19. If you now check your profile page and evilUser profile page,
+	you can see that you have 0 amount and evilUser has 200
+	
+Steps to fix this issue:
+1. Open file SecurityConfiguration.java
+2. In configure-method, comment line 23: 'http.csrf().disable();'
+3. Now when you click 'Get Money, Get Paid' -button, there comes csrf-error and no money is transferred

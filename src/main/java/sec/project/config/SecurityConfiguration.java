@@ -20,9 +20,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // no real security at the moment
+        http.csrf().disable();
+
         http.authorizeRequests()
-                .anyRequest().permitAll();
+                .antMatchers("/monkepo").permitAll()
+                .antMatchers("/hunters").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/pokemonHunter/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/adminPage").hasAuthority("USER")
+                .and()
+                .formLogin()
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .loginPage("/login")
+                .defaultSuccessUrl("/monkepo")
+                .failureUrl("/monkepo")
+                .permitAll()
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/pokemon")
+                .permitAll();
     }
 
     @Autowired

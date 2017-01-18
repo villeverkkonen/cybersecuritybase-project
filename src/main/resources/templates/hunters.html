@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Monkepo Hunters</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="shortcut icon" href="/images/monkeball-icon.png" type="image/png"/>
+        <style>
+            body {
+                color: red;
+                background-color: #000000;
+                padding: 20px;
+            }
+
+            .tausta {
+                background-color: #191919;
+                width: fit-content;
+                height: fit-content;
+                border-radius: 20px;
+                padding: 20px;
+            }
+
+            .list {
+                background-color: #0C090A;
+                width: fit-content;
+                padding: 5px;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="tausta">
+            <h1>Welcome On Your Way To Monkepo Master</h1>
+            <br/>
+            <h2>Monkepo Hunters:</h2>
+            <ol>
+                <li class="list" th:each="hunter : ${hunters}" th:utext="${hunter.username}">username</li>
+                <!-- th:utext prints unescaped text, change it to th:text so JavaScript, HTML etc codes doesn't work -->
+            </ol>
+            <br/>
+            <form th:action="@{/monkepoHunter/{idCode}(idCode=${idCode})}" th:method="POST">
+                <button class="btn btn-danger" type="submit">Profile Page</button>
+            </form>
+            <br/>
+            <a href="/evilUser">Profile Page for evilUser</a>
+            <br/>
+            <br/>
+            <a href="/">Back to Front Page</a>
+            <br/>
+            <br/>
+            <a href="javascript:history.back()">Go Back</a>
+            <br/>
+            <br/>
+            <form action="#" th:action="@{/logout}" method="POST">
+                <button class="btn btn-danger" type="submit">Log Out</button>
+            </form>
+            <br/>
+        </div>
+    </body>
+</html>

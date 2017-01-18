@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Monkepo Hunters</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="shortcut icon" href="/images/monkeball-icon.png" type="image/png"/>
+        <script
+            src="https://code.jquery.com/jquery-3.1.1.js"
+            integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="
+        crossorigin="anonymous"></script>
+        <style>
+
+            body {
+                color: red;
+                background-color: #000000;
+                padding: 20px;
+            }
+
+            .tausta {
+                background-color: #191919;
+                width: fit-content;
+                height: fit-content;
+                border-radius: 20px;
+                padding: 20px;
+            }
+
+            .success {
+                font-size: large;
+            }
+
+            input {
+                background-color: #0C090A;
+            }
+
+            #container {
+                position: relative;
+            }
+            #pokeball {
+                position: absolute;
+            }
+
+        </style>
+    </head>
+    <body onload="throwMonkeball($('#monkeball'), 4000)">
+        <div class="tausta">
+            <div id="container" sec:authorize="!isAuthenticated()">
+                <div id="monkeball">
+                    <img src="/images/monkeball.png" alt="monkeball" />
+                </div>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <span class="success">Great Success </span><span class="success" sec:authentication="name">username</span><span class="success">!</span>
+                <br/>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()">
+                <h1>Become a Monkepo Hunter!</h1>
+            </div>
+            <br/>
+            <div sec:authorize="!isAuthenticated()">
+                <p>Create a new account and get free 100 monkepoMoney!</p>
+                <form action="#" th:action="@{/monkepo}" method="POST">
+                    <p><label for="username">Username:<br/> <input type="text" name="username" id="username"/></label></p>
+                    <p><label for="password">Password:<br/> <input type="password" name="password" id="password" autocomplete="off"/></label></p>
+                    <button class="btn btn-danger" type="submit">Register Now!</button>
+                </form>
+            </div>
+            <br/>
+            <br/>
+            <div sec:authorize="!isAuthenticated()">
+                <p>Log in, if you already have signed up</p>
+                <form action="#" th:action="@{/login}" method="POST">
+                    <div><label for="username">Username:<br/> <input type="text" name="username" id ="username"/></label></div>
+                    <div><label for="password">Password:<br/> <input type="password" name="password" id="password" autocomplete="off"/></label></div>
+                    <button class="btn btn-danger" type="submit">Log In</button>
+                </form>
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+                <a href="/hunters">Move to Hunters Page</a>
+            </div>
+            <br/>
+            <br/>
+            <div sec:authorize="isAuthenticated()">
+                <form action="#" th:action="@{/logout}" method="POST">
+                    <button class="btn btn-danger" type="submit">Log Out</button>
+                </form>
+            </div>
+        </div>
+        <script th:src="@{javascript/monkeball.js}"></script>
+    </body>
+</html>

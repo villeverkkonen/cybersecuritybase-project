@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Admin Page</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="shortcut icon" href="/images/monkeball-icon.png" type="image/png"/>
+        <style>
+            body {
+                color: red;
+                background-color: #000000;
+                padding: 20px;
+            }
+
+            .tausta {
+                background-color: #191919;
+                width: fit-content;
+                height: fit-content;
+                border-radius: 20px;
+                padding: 20px;
+            }
+
+            span {
+                color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="tausta">
+            <h3>This is an admin page<br/>
+                If you are just an user,<br/>
+                you should not be here!</h3>
+        </div>
+        <br/>
+        <a href="/">Back to Front Page</a>
+        <br/>
+        <br/>
+        <a href="/hunters">Move to Hunters Page</a>
+        <br/>
+        <br/>
+        <a href="javascript:history.back()">Go Back</a>
+        <br/>
+        <br/>
+        <form action="#" th:action="@{/logout}" method="POST">
+            <button class="btn btn-danger" type="submit">Log Out</button>
+        </form>
+        <br/>
+    </body>
+</html>

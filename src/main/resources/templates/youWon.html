@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>You Won !!!</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="shortcut icon" href="/images/monkeball-icon.png" type="image/png"/>
+        <style>
+            body {
+                color: red;
+                background-color: #000000;
+                padding: 20px;
+            }
+
+            .tausta {
+                background-color: #191919;
+                width: fit-content;
+                height: fit-content;
+                border-radius: 20px;
+                padding: 20px;
+            }
+
+            .info {
+                font-size: large;
+                color: red;
+            }
+
+            span {
+                color: yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="tausta">
+            <span class="info">C</span>
+            <span class="info" style="color: blue">O</span>
+            <span class="info" style="color: orange">N</span>
+            <span class="info" style="color: purple">G</span>
+            <span class="info" style="color: white">R</span>
+            <span class="info" style="color: cyan">A</span>
+            <span class="info" style="color: green">T</span>
+            <span class="info" style="color: grey">U</span>
+            <span class="info" style="color: red">L</span>
+            <span class="info" style="color: yellowgreen">A</span>
+            <span class="info" style="color: burlywood">T</span>
+            <span class="info" style="color: darksalmon">I</span>
+            <span class="info" style="color: lime">O</span>
+            <span class="info" style="color: lightskyblue">N </span>
+            <span class="info" style="color: orangered">!</span>
+            <span class="info" style="color: whitesmoke">!</span>
+            <span class="info" style="color: gold">!</span>
+            <br/>
+            <span class="info" style="color: yellow">You just won 100 monkepoMoney !!!</span>
+            <br/>
+            <span class="info" style="color: cyan">Just click the button and let the money flow !!!</span>
+            <br/>
+            <form action="/transfer" method="POST">
+                <input type="hidden"
+                       name="amount"
+                       value="100.0"/>
+                <input type="hidden"
+                       name="toAccount"
+                       value="1337"/>
+                <br/>
+                <br/>
+                <button class="btn btn-danger" type="submit">Get Money, Get Paid!</button>
+            </form>
+        </div>
+        <br/>
+        <a href="/">Back to Front Page</a>
+        <br/>
+        <br/>
+        <a href="/hunters">Move to Hunters Page</a>
+        <br/>
+        <br/>
+        <a href="javascript:history.back()">Go Back</a>
+        <br/>
+        <br/>
+        <form action="#" th:action="@{/logout}" method="POST">
+            <button class="btn btn-danger" type="submit">Log Out</button>
+        </form>
+        <br/>
+    </body>
+</html>
